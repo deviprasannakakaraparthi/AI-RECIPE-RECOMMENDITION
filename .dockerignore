@@ -1,7 +1,9 @@
-# Exclude large project files
-FOOD_project.zip
-recipe_app_for_windows.zip
-windows_patch.zip
+# Exclude EVERYTHING large and unnecessary
+*.zip
+*.tflite
+*.csv
+*.pkl
+*.pt
 android/
 android_sdk/
 frontend_flutter/
@@ -11,15 +13,29 @@ web/
 .git/
 .DS_Store
 
-# Python
+# Explicitly block all venvs
+**/venv/
+**/ENV/
+**/.env
+**/.venv/
+venv/
+backend/venv/
+
+# Python junk
 **/__pycache__/
 **/*.pyc
 **/*.pyo
 **/*.pyd
-.env
-venv/
-ENV/
 
 # Logs
 *.log
+backend/*.log
 static/videos/*.mp4
+
+# Pre-built Flutter UI is in backend/static/web, keep that but ignore others
+!backend/static/web/
+!recipes_cleaned.csv
+!backend/yolov8n.pt
+!backend/recipe_embeddings.pkl
+!backend/indian_recipe_embeddings.pkl
+!backend/Cleaned_Indian_Food_Dataset_embeddings.pkl
