@@ -1,0 +1,26 @@
+fastapi
+uvicorn
+--index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+--index-url https://pypi.org/simple
+transformers
+opencv-python-headless
+pillow
+sentence-transformers
+google-api-python-client
+numpy
+pandas
+ultralytics
+seaborn
+matplotlib
+pyyaml
+requests
+tqdm
+scipy
+python-multipart
+google-generativeai
+python-dotenv
+youtube-search-python
+moviepy
+edge-tts
