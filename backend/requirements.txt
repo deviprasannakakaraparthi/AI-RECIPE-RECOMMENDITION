@@ -1,9 +1,11 @@
 fastapi
 uvicorn
+--index-url https://download.pytorch.org/whl/cpu
 torch
 torchvision
+--index-url https://pypi.org/simple
 transformers
-opencv-python
+opencv-python-headless
 pillow
 sentence-transformers
 google-api-python-client

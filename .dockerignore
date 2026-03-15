@@ -1,0 +1,25 @@
+# Exclude large project files
+FOOD_project.zip
+recipe_app_for_windows.zip
+windows_patch.zip
+android/
+android_sdk/
+frontend_flutter/
+frontend_web/
+web/
+.agents/
+.git/
+.DS_Store
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.env
+venv/
+ENV/
+
+# Logs
+*.log
+static/videos/*.mp4
