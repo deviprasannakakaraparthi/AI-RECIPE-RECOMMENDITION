@@ -1,0 +1,43 @@
+# MacOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+venv/
+ENV/
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+*.p12
+*.js.deps
+*.js.tar.gz
+
+# Android
+.gradle/
+local.properties
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+android/app/build/
+
+# Project Specific
+deploy.log
+backend.log
+web_server.log
+server.log
+static/videos/*.mp4
+*.zip
+FOOD_project.zip
+recipe_app_for_windows.zip
+windows_patch.zip

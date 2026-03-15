@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      # Map the dataset from the root if it's there, but the Dockerfile copies it anyway
+      - ./recipes_cleaned.csv:/app/recipes_cleaned.csv
+    env_file:
+      - ./backend/.env
+    restart: always
+
+# Note: The Android app connects to http://10.0.2.2:8000 on an emulator.
+# On a physical device, use the machine's IP address.

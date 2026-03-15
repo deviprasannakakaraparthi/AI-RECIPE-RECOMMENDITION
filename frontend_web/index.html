@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recipe App (Web Version)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            background: #ff5252;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #fafafa;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        button {
+            background: #ff5252;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ff1744;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .recipe-card {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .recipe-header {
+            background: #fdfdfd;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .recipe-title {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+
+        .recipe-meta {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        .play-video-btn {
+            background: #2196F3;
+            margin: 15px;
+            width: calc(100% - 30px);
+        }
+
+        .play-video-btn:hover {
+            background: #1976D2;
+        }
+
+        #loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        #preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-bottom: 20px;
+            display: none;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🥘 AI Food & Recipe Scanner</h1>
+    </div>
+
+    <div class="container">
+        <label class="upload-area" id="drop-area">
+            <input type="file" id="fileInput" accept="image/*">
+            <div id="uploadText">
+                <span style="font-size: 40px;">📸</span><br>
+                <strong style="display:block; margin-top:10px;">Tap to Open Camera or Select Image</strong>
+                <span style="font-size: 12px; color:#888;">Supports JPG, PNG</span>
+            </div>
+            <img id="preview" src="#" alt="Preview">
+        </label>
+
+        <div style="margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+            <div style="flex: 1; min-width: 45%;">
+                <label style="font-weight: bold; font-size: 14px; color: #555;">Meal Type:</label>
+                <select id="mealType"
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch" selected>Lunch</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Juice/Beverage">Juice / Beverage</option>
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 45%;">
+                <label style="font-weight: bold; font-size: 14px; color: #555;">Spice Level:</label>
+                <select id="spiceLevel"
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px;">
+                    <option value="Mild">Mild</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="Spicy">Spicy</option>
+                </select>
+            </div>
+            <div style="flex: 1; min-width: 45%;">
+                <label style="font-weight: bold; font-size: 14px; color: #555;">Region / State (Cuisine):</label>
+                <input type="text" id="cuisineType" value="Indian" placeholder="e.g. Kerala, Punjabi, Italian"
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; box-sizing: border-box;">
+            </div>
+            <div style="flex: 1; min-width: 45%;">
+                <label style="font-weight: bold; font-size: 14px; color: #555;">Style (Curry, Fry, etc):</label>
+                <input type="text" id="foodStyle" value="Curry" placeholder="e.g. Curry, Fry, Soup, Salad"
+                    style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-top: 5px; box-sizing: border-box;">
+            </div>
+        </div>
+
+        <button id="analyzeBtn" disabled>🪄 Generate Custom Recipe</button>
+        <div id="loading">Chef AI is analyzing your food & customizing the recipe... ⏳</div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const uploadText = document.getElementById('uploadText');
+        const analyzeBtn = document.getElementById('analyzeBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        let selectedFile = null;
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                selectedFile = this.files[0];
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    uploadText.style.display = 'none';
+                    analyzeBtn.disabled = false;
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        analyzeBtn.addEventListener('click', async () => {
+            if (!selectedFile) return;
+
+            const mealType = document.getElementById('mealType').value;
+            const spiceLevel = document.getElementById('spiceLevel').value;
+            const cuisine = document.getElementById('cuisineType').value || 'Indian';
+            const foodStyle = document.getElementById('foodStyle').value || 'Curry';
+
+            analyzeBtn.style.display = 'none';
+            loading.style.display = 'block';
+            results.innerHTML = '';
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('meal_type', mealType);
+            formData.append('cuisine', cuisine);
+            formData.append('spice_level', spiceLevel);
+            formData.append('food_style', foodStyle);
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.recipes && data.recipes.length > 0) {
+                    data.recipes.forEach(recipe => {
+                        const videoUrl = recipe.video_link ? recipe.video_link.replace('10.0.2.2', 'localhost') : '#';
+
+                        const card = document.createElement('div');
+                        card.className = 'recipe-card';
+                        card.innerHTML = `
+                        <div class="recipe-header">
+                            <h3 class="recipe-title">${recipe.title}</h3>
+                            <p class="recipe-meta">🍽️ ${recipe.style || 'AI Generated'} • ⏱️ ${recipe.prep_time || '15 min'}</p>
+                            <p class="recipe-meta" style="margin-top: 5px; color:#ff5252;">🥘 ${cuisine} • ${mealType} • ${foodStyle} • ${spiceLevel}</p>
+                        </div>
+                        <button class="play-video-btn" onclick="window.open('${videoUrl}', '_blank')">▶️ Watch Animated Video</button>
+                        <div style="padding: 15px;">
+                            <strong>Ingredients:</strong>
+                            <ul style="padding-left: 20px; font-size:14px;">
+                                ${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}
+                            </ul>
+                            <strong>Steps:</strong>
+                            <ul style="padding-left: 20px; font-size:14px; color:#444;">
+                                ${recipe.instructions.map(s => `<li>${s}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                        results.appendChild(card);
+                    });
+                } else {
+                    results.innerHTML = '<p style="color:red; text-align:center;">Could not find a recipe.</p>';
+                }
+            } catch (e) {
+                results.innerHTML = `<p style="color:red; text-align:center;">Connection Error! Ensure backend is running.</p>`;
+            } finally {
+                analyzeBtn.style.display = 'block';
+                loading.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,10 @@
+
+Recipe_ID,Cuisine,Ingredients,Category,Cooking_Time,Difficulty,Cooking_Method,Serving_Size
+1,Italian,"['tomato', 'mozzarella', 'basil', 'olive oil']",Main Course,30 mins,Easy,Baking,2
+2,American,"['ground beef', 'lettuce', 'tomato', 'cheese', 'bun']",Main Course,15 mins,Easy,Grilling,1
+3,Mexican,"['tortilla', 'chicken', 'cheese', 'salsa', 'avocado']",Main Course,20 mins,Medium,Frying,2
+4,Japanese,"['rice', 'salmon', 'seaweed', 'cucumber']",Main Course,40 mins,Hard,Rolling,2
+5,Indian,"['chicken', 'yogurt', 'spices', 'onion', 'tomato']",Main Course,45 mins,Medium,Simmering,4
+6,French,"['egg', 'milk', 'cheese', 'spinach', 'flour']",Breakfast,20 mins,Medium,Baking,4
+7,Mediterranean,"['cucumber', 'tomato', 'olive', 'feta', 'onion']",Salad,10 mins,Easy,Chopping,2
+8,Dessert,"['flour', 'sugar', 'chocolate', 'butter', 'egg']",Dessert,60 mins,Medium,Baking,8
