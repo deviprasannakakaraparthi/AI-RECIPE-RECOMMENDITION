@@ -70,3 +70,4 @@ To run on a real phone, use `ngrok` to expose your local server:
    private const val BASE_URL = "https://your-ngrok-url.app/"
    ```
 5. Rebuild and run on your device.
+# AI-RECIPE-RECOMMENDITION
